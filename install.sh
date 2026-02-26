@@ -48,7 +48,7 @@ echo    "  • 입력하신 정보를 외부로 전송하지 않습니다"
 echo    "  • 오픈소스이며 누구나 코드를 확인할 수 있습니다"
 echo    "  • GitHub: https://github.com/kokoju007/openclaw-setup"
 echo ""
-read -p "  계속하려면 Enter를 누르세요..." _
+read -r -p "  계속하려면 Enter를 누르세요..." _ </dev/tty
 
 # ── Step 1: OS 확인 ────────────────────────────────────────────────────────
 step "Step 1/5 · 서버 환경 확인"
@@ -59,7 +59,7 @@ VER=$(lsb_release -sr 2>/dev/null || echo "Unknown")
 if [[ "$OS" != "Ubuntu" ]]; then
   warn "Ubuntu가 아닌 환경입니다 ($OS $VER)"
   warn "Ubuntu 20.04 / 22.04 / 24.04 에서 테스트되었습니다"
-  read -p "  그래도 계속하시겠습니까? (y/N): " cont
+  read -r -p "  그래도 계속하시겠습니까? (y/N): " cont </dev/tty
   [[ "$cont" =~ ^[Yy]$ ]] || error "설치를 중단합니다"
 else
   success "Ubuntu $VER 확인됨"
@@ -117,7 +117,7 @@ info "설치할 버전: openclaw@${LATEST_VER}"
 if command -v openclaw &>/dev/null; then
   CURRENT_VER=$(openclaw -V 2>/dev/null || echo "알 수 없음")
   info "OpenClaw가 이미 설치되어 있습니다 (버전: $CURRENT_VER)"
-  read -p "  최신 버전으로 업데이트할까요? (y/N): " update_oc
+  read -r -p "  최신 버전으로 업데이트할까요? (y/N): " update_oc </dev/tty
   if [[ "$update_oc" =~ ^[Yy]$ ]]; then
     npm install -g "openclaw@${LATEST_VER}"
     success "OpenClaw 업데이트 완료"
@@ -148,7 +148,7 @@ echo    "  (예시: 1234567890:ABCdefGHIjklMNOpqrSTUvwxYZ)"
 echo ""
 
 while true; do
-  read -p "  텔레그램 봇 토큰을 입력하세요: " BOT_TOKEN
+  read -r -p "  텔레그램 봇 토큰을 입력하세요: " BOT_TOKEN </dev/tty
   if [[ "$BOT_TOKEN" =~ ^[0-9]{8,12}:[A-Za-z0-9_-]{35,}$ ]]; then
     success "토큰 형식 확인됨"
     break
@@ -168,7 +168,7 @@ echo    "  (예시: 123456789)"
 echo ""
 
 while true; do
-  read -p "  텔레그램 사용자 ID (숫자)를 입력하세요: " USER_ID
+  read -r -p "  텔레그램 사용자 ID (숫자)를 입력하세요: " USER_ID </dev/tty
   if [[ "$USER_ID" =~ ^[0-9]{5,12}$ ]]; then
     success "사용자 ID 확인됨"
     break
@@ -187,7 +187,7 @@ echo    "  3. sk-ant-... 형태의 키 복사"
 echo ""
 
 while true; do
-  read -p "  Anthropic API 키를 입력하세요 (sk-ant-...): " ANTHROPIC_KEY
+  read -r -p "  Anthropic API 키를 입력하세요 (sk-ant-...): " ANTHROPIC_KEY </dev/tty
   if [[ "$ANTHROPIC_KEY" =~ ^sk-ant-[A-Za-z0-9_-]{20,}$ ]]; then
     success "API 키 형식 확인됨"
     break
