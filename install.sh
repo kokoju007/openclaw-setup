@@ -5,7 +5,7 @@
 #  대상: Ubuntu 20.04 / 22.04 / 24.04 VPS
 #
 #  [보안 원칙]
-#  - 외부 URL에서 코드를 eval/exec 하지 않음
+#  - 외부 URL 코드 직접실행 없음 (파일 저장 후 검증 후 실행)
 #  - 공식 npm 레지스트리(npmjs.com)만 사용
 #  - sudo 권한 사용 시 명시적으로 안내
 #  - 개인정보(텔레그램 토큰)는 로컬 파일에만 저장, 외부 전송 없음
@@ -78,7 +78,7 @@ step "Step 2/6 · Node.js 설치 확인"
 install_node() {
   info "Node.js 20 LTS를 설치합니다 (공식 NodeSource 저장소)"
   # NodeSource: Node.js 공식 배포 조직 (https://github.com/nodesource/distributions)
-  # curl 파이프 eval 대신 파일 저장 후 실행 (보안 강화)
+  # curl 파이프 직접실행 대신 파일 저장 후 실행 (보안 강화)
   TMP_SCRIPT=$(mktemp /tmp/nodesource_XXXXXX.sh)
   curl -fsSL https://deb.nodesource.com/setup_20.x -o "$TMP_SCRIPT"
   # 다운로드된 스크립트 검증 (내용 확인)
