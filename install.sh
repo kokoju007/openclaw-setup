@@ -214,6 +214,9 @@ openclaw onboard \
   --skip-skills \
   --skip-ui 2>&1 | grep -v "^$" || true
 
+# gateway 모드 설정 (필수)
+openclaw config set gateway.mode local
+
 # 텔레그램 채널 설정
 info "텔레그램 채널 설정 중..."
 openclaw config set channels.telegram.enabled true
@@ -223,14 +226,31 @@ openclaw config set "channels.telegram.allowFrom[0]" "$USER_ID"
 
 success "설정 완료"
 
-# 서비스 재시작
-info "서비스를 재시작합니다..."
-if systemctl is-active --quiet openclaw 2>/dev/null; then
-  systemctl restart openclaw
-else
-  systemctl enable openclaw 2>/dev/null || true
-  systemctl start openclaw 2>/dev/null || true
-fi
+# systemd 서비스 직접 등록 (24시간 자동 실행)
+info "24시간 자동 실행 서비스 등록 중..."
+SERVICE_FILE="/etc/systemd/system/openclaw.service"
+
+sudo tee "$SERVICE_FILE" > /dev/null << EOF
+[Unit]
+Description=OpenClaw AI Agent
+After=network.target
+
+[Service]
+Type=simple
+User=${USER}
+WorkingDirectory=${HOME}
+ExecStart=${OPENCLAW_PATH} gateway
+Restart=always
+RestartSec=10
+Environment=HOME=${HOME}
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable openclaw
+sudo systemctl start openclaw
 
 sleep 5
 
