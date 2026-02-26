@@ -373,11 +373,16 @@
     <div class="page-num">04 / 05</div>
   </div>
 
-  <div class="section-title"><div class="num">06</div>원클릭 자동 설치</div>
-  <p>SSH 접속 후 아래 한 줄만 복사해서 붙여넣으면 끝입니다.</p>
+  <div class="section-title"><div class="num">06</div>설치 방법 (2단계)</div>
+  <p>SSH 접속 후 아래 명령어를 <strong>한 줄씩 차례대로</strong> 실행하세요.</p>
 
-  <div class="code-block" style="font-size:12.5px;padding:16px 20px;">
-    <span class="code-cmd">curl</span> -fsSL https://raw.githubusercontent.com/kokoju007/openclaw-setup/main/install.sh -o install.sh<br>
+  <p style="margin:10px 0 4px 0;font-size:12px;color:var(--text-muted);">① 먼저 이 줄을 붙여넣고 Enter</p>
+  <div class="code-block" style="font-size:12.5px;padding:14px 20px;margin-bottom:10px;">
+    <span class="code-cmd">curl</span> -fsSL https://raw.githubusercontent.com/kokoju007/openclaw-setup/main/install.sh -o install.sh
+  </div>
+
+  <p style="margin:0 0 4px 0;font-size:12px;color:var(--text-muted);">② 그 다음 이 줄을 붙여넣고 Enter</p>
+  <div class="code-block" style="font-size:12.5px;padding:14px 20px;">
     <span class="code-cmd">bash</span> install.sh
   </div>
 
