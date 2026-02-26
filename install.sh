@@ -207,7 +207,7 @@ After=network.target
 Type=simple
 User=${USER}
 WorkingDirectory=${HOME}
-ExecStart=${OPENCLAW_PATH} gateway start
+ExecStart=${OPENCLAW_PATH}
 Restart=always
 RestartSec=10
 Environment=HOME=${HOME}
@@ -249,5 +249,5 @@ echo -e "  ${YELLOW}⚠️  Claude API 키가 필요합니다${NC}"
 echo    "  https://console.anthropic.com 에서 발급 후"
 echo    "  텔레그램 봇에게 입력 방법을 물어보세요"
 echo ""
-echo -e "  ${CYAN}문의: 크몽 메시지로 연락주세요${NC}"
+echo -e "  ${CYAN}GitHub: https://github.com/kokoju007/openclaw-setup${NC}"
 echo ""
