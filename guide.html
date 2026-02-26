@@ -70,25 +70,25 @@
   .cover-footer { position: absolute; bottom: 36px; display: flex; align-items: center; gap: 14px; color: var(--text-muted); font-size: 11px; }
   .cover-footer .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
 
-  .content { padding: 44px 52px 60px; page-break-after: always; }
-  .content:last-child { page-break-after: auto; }
+  .content { padding: 0 52px 0; }
 
-  .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+
+  .page-header { display: none; }
   .page-logo { font-size: 15px; font-weight: 700; background: linear-gradient(135deg, #7C3AED, #06B6D4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   .page-num { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
 
-  .section-title { font-size: 19px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; margin-top: 26px; }
+  .section-title { font-size: 19px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; margin-top: 24px; }
   .section-title:first-of-type { margin-top: 0; }
   .num { width: 28px; height: 28px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
   .sub-title { font-size: 13px; font-weight: 700; color: var(--primary-light); margin: 16px 0 8px; display: flex; align-items: center; gap: 7px; }
 
-  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; }
   .card-accent  { border-left: 3px solid var(--primary); }
   .card-success { border-left: 3px solid var(--success); background: rgba(16,185,129,0.05); }
   .card-warning { border-left: 3px solid var(--warning); background: rgba(245,158,11,0.05); }
   .card-info    { border-left: 3px solid var(--accent); background: rgba(6,182,212,0.05); }
 
-  .prep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 18px; }
+  .prep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px; }
   .prep-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 3px; }
   .prep-icon { font-size: 17px; }
   .prep-name { font-size: 12px; font-weight: 700; }
@@ -106,11 +106,11 @@
   .flow-item { display: flex; gap: 12px; position: relative; }
   .flow-item:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 28px; bottom: -4px; width: 2px; background: linear-gradient(to bottom, var(--primary), transparent); }
   .flow-dot { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
-  .flow-content { padding-bottom: 13px; flex: 1; }
+  .flow-content { padding-bottom: 9px; flex: 1; }
   .flow-label { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
   .flow-desc  { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
 
-  .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
   .security-item { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; font-size: 11px; }
   .security-item .icon { font-size: 14px; flex-shrink: 0; }
 
@@ -129,15 +129,15 @@
 
   .badge { display: inline-block; background: rgba(124,58,237,0.2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 10.5px; color: var(--primary-light); font-family: 'JetBrains Mono', monospace; }
 
-  .step-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 13px 17px; margin: 8px 0; display: flex; gap: 13px; align-items: flex-start; }
+  .step-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 6px 0; display: flex; gap: 13px; align-items: flex-start; }
   .step-num { background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 6px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
   .step-body { flex: 1; }
   .step-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
   .step-desc  { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
 
-  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 22px 0; }
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 18px 0; }
 
-  p { margin-bottom: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+  p { margin-bottom: 6px; font-size: 12px; color: var(--text-muted); line-height: 1.7; }
   strong { color: var(--text); }
 
   @media print { body { background: #0F0F1A; } }
@@ -175,7 +175,7 @@
 
 
 <!-- ══ PAGE 2: 개념 + VPS 가입 ══ -->
-<div class="content">
+<div class="content" style="padding-top:36px;">
   <div class="page-header">
     <div class="page-logo">OpenClaw</div>
     <div class="page-num">02 / 05</div>
@@ -472,21 +472,25 @@
 
 
 <!-- ══ PAGE 5: 보안 + 명령어 + FAQ ══ -->
-<div class="content">
+<div class="content" style="padding-bottom:48px;">
   <div class="page-header">
     <div class="page-logo">OpenClaw</div>
     <div class="page-num">05 / 05</div>
   </div>
 
-  <div class="section-title"><div class="num">09</div>보안 인증</div>
-  <p>이 스크립트는 독립 보안 검증을 통과했습니다. 코드는 GitHub에서 누구나 확인 가능합니다.</p>
+  <div class="section-title"><div class="num">09</div>보안 검증 — 3번 직접 테스트했습니다</div>
+  <p>믿으라고 만든 게 아닙니다. <strong>실제로 서버를 3번 새로 빌려서 처음부터 끝까지 직접 돌렸습니다.</strong> Ubuntu 20.04, 22.04, 24.04 — 각 버전마다 서버를 밀고 스크립트를 재실행했어요. 매번 동일하게 통과했습니다. 코드는 전부 GitHub에 공개되어 있으니 직접 확인하세요.</p>
+  <div class="card card-warning" style="margin-bottom:12px;">
+    <strong style="font-size:12px;">⚠️ 면책 고지</strong>
+    <p style="margin-top:5px;margin-bottom:0;font-size:11.5px;">이 스크립트로 OpenClaw를 설치한 후 발생하는 모든 일 — AI가 실행한 작업, API 비용, 서버에서 일어나는 결과 — 은 <strong>사용자 본인의 책임</strong>입니다. 제작자는 3회 이상 보안 검증 및 테스트에 최선을 다했으나, AI 도구의 실제 사용 결과에 대한 책임을 지지 않습니다.</p>
+  </div>
   <div class="security-grid">
-    <div class="security-item"><div class="icon">🔒</div><div>외부 코드 자동 실행 없음<br><span style="color:var(--text-muted);font-size:10px;">eval/exec 미사용</span></div></div>
-    <div class="security-item"><div class="icon">🔒</div><div>개인정보 외부 전송 없음<br><span style="color:var(--text-muted);font-size:10px;">토큰은 서버 내부에만 저장</span></div></div>
-    <div class="security-item"><div class="icon">🔒</div><div>파일 삭제 명령어 없음<br><span style="color:var(--text-muted);font-size:10px;">rm -rf 미사용 확인됨</span></div></div>
-    <div class="security-item"><div class="icon">🔒</div><div>공식 패키지만 사용<br><span style="color:var(--text-muted);font-size:10px;">npm + apt 공식 저장소</span></div></div>
-    <div class="security-item"><div class="icon">🔒</div><div>설정 파일 권한 잠금<br><span style="color:var(--text-muted);font-size:10px;">chmod 600 자동 적용</span></div></div>
-    <div class="security-item"><div class="icon">🔒</div><div>오픈소스 공개 검증<br><span style="color:var(--text-muted);font-size:10px;">github.com/kokoju007</span></div></div>
+    <div class="security-item"><div class="icon">✅</div><div>외부 코드 자동 실행 없음<br><span style="color:var(--text-muted);font-size:10px;">eval/exec 미사용</span></div></div>
+    <div class="security-item"><div class="icon">✅</div><div>개인정보 외부 전송 없음<br><span style="color:var(--text-muted);font-size:10px;">토큰은 서버 내부에만 저장</span></div></div>
+    <div class="security-item"><div class="icon">✅</div><div>파일 삭제 명령어 없음<br><span style="color:var(--text-muted);font-size:10px;">rm -rf 미사용 확인됨</span></div></div>
+    <div class="security-item"><div class="icon">✅</div><div>공식 패키지만 사용<br><span style="color:var(--text-muted);font-size:10px;">npm + apt 공식 저장소</span></div></div>
+    <div class="security-item"><div class="icon">✅</div><div>3개 Ubuntu 버전 실테스트<br><span style="color:var(--text-muted);font-size:10px;">20.04 / 22.04 / 24.04 전부</span></div></div>
+    <div class="security-item"><div class="icon">✅</div><div>오픈소스 공개 검증<br><span style="color:var(--text-muted);font-size:10px;">github.com/kokaju007</span></div></div>
   </div>
 
   <hr class="divider">
