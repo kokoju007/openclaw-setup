@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>OpenClaw VPS 설치 가이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --primary: #7C3AED;
+    --primary-light: #8B5CF6;
+    --accent: #06B6D4;
+    --accent-light: #CFFAFE;
+    --bg: #0F0F1A;
+    --bg-card: #1A1A2E;
+    --text: #F1F5F9;
+    --text-muted: #94A3B8;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --border: rgba(124,58,237,0.3);
+    --code-bg: #0D0D1A;
+  }
+
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.7;
+    width: 794px;
+    margin: 0 auto;
+  }
+
+  .cover {
+    width: 794px; height: 1123px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #0F0F1A 0%, #1A0A3E 50%, #0F1A2E 100%);
+    position: relative; overflow: hidden;
+    page-break-after: always;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+  }
+  .cover-badge {
+    background: rgba(124,58,237,0.2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 18px;
+    font-size: 11px; color: var(--primary-light);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 28px;
+  }
+  .cover-logo {
+    font-size: 56px; font-weight: 900;
+    background: linear-gradient(135deg, #7C3AED, #06B6D4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: -1px; margin-bottom: 6px;
+  }
+  .cover-subtitle { font-size: 16px; color: var(--text-muted); margin-bottom: 44px; font-weight: 300; }
+  .cover-title { font-size: 30px; font-weight: 700; line-height: 1.4; margin-bottom: 20px; max-width: 500px; }
+  .cover-desc { font-size: 14px; color: var(--text-muted); max-width: 420px; margin-bottom: 48px; line-height: 1.9; }
+  .cover-tags { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 56px; }
+  .tag { background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.3); border-radius: 8px; padding: 5px 13px; font-size: 12px; color: var(--accent); }
+  .cover-footer { position: absolute; bottom: 36px; display: flex; align-items: center; gap: 14px; color: var(--text-muted); font-size: 11px; }
+  .cover-footer .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+
+  .content { padding: 44px 52px 60px; page-break-after: always; }
+  .content:last-child { page-break-after: auto; }
+
+  .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .page-logo { font-size: 15px; font-weight: 700; background: linear-gradient(135deg, #7C3AED, #06B6D4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .page-num { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+  .section-title { font-size: 19px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; margin-top: 26px; }
+  .section-title:first-of-type { margin-top: 0; }
+  .num { width: 28px; height: 28px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .sub-title { font-size: 13px; font-weight: 700; color: var(--primary-light); margin: 16px 0 8px; display: flex; align-items: center; gap: 7px; }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+  .card-accent  { border-left: 3px solid var(--primary); }
+  .card-success { border-left: 3px solid var(--success); background: rgba(16,185,129,0.05); }
+  .card-warning { border-left: 3px solid var(--warning); background: rgba(245,158,11,0.05); }
+  .card-info    { border-left: 3px solid var(--accent); background: rgba(6,182,212,0.05); }
+
+  .prep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 18px; }
+  .prep-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 3px; }
+  .prep-icon { font-size: 17px; }
+  .prep-name { font-size: 12px; font-weight: 700; }
+  .prep-where { font-size: 11px; color: var(--accent); }
+  .prep-cost  { font-size: 10px; color: var(--text-muted); }
+
+  .code-block { background: var(--code-bg); border: 1px solid rgba(124,58,237,0.2); border-radius: 9px; padding: 13px 17px; margin: 9px 0; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #A5F3FC; position: relative; overflow: hidden; line-height: 1.8; }
+  .code-block::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--primary), var(--accent)); }
+  .code-comment { color: #4B5563; }
+  .code-cmd { color: #34D399; }
+  .code-str { color: #FCD34D; }
+  .code-out { color: #94A3B8; }
+
+  .flow { display: flex; flex-direction: column; margin: 12px 0; }
+  .flow-item { display: flex; gap: 12px; position: relative; }
+  .flow-item:not(:last-child)::after { content: ''; position: absolute; left: 13px; top: 28px; bottom: -4px; width: 2px; background: linear-gradient(to bottom, var(--primary), transparent); }
+  .flow-dot { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .flow-content { padding-bottom: 13px; flex: 1; }
+  .flow-label { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .flow-desc  { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+
+  .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .security-item { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; font-size: 11px; }
+  .security-item .icon { font-size: 14px; flex-shrink: 0; }
+
+  .diagram { background: var(--code-bg); border: 1px solid var(--border); border-radius: 9px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin: 12px 0; text-align: center; line-height: 2.2; }
+  .diagram .hl  { color: var(--accent); font-weight: 700; }
+  .diagram .arr { color: var(--primary-light); }
+
+  .tip { background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.25); border-radius: 8px; padding: 10px 14px; font-size: 11.5px; color: var(--accent-light); margin: 10px 0; display: flex; gap: 8px; }
+  .tip .ti { flex-shrink: 0; }
+
+  .cmd-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  .cmd-table th { background: rgba(124,58,237,0.2); padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; color: var(--primary-light); border: 1px solid var(--border); }
+  .cmd-table td { padding: 8px 12px; font-size: 11px; border: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+  .cmd-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .cmd-table .mono { font-family: 'JetBrains Mono', monospace; color: #A5F3FC; font-size: 10.5px; }
+
+  .badge { display: inline-block; background: rgba(124,58,237,0.2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 10.5px; color: var(--primary-light); font-family: 'JetBrains Mono', monospace; }
+
+  .step-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 13px 17px; margin: 8px 0; display: flex; gap: 13px; align-items: flex-start; }
+  .step-num { background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 6px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .step-body { flex: 1; }
+  .step-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .step-desc  { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 22px 0; }
+
+  p { margin-bottom: 8px; font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+  strong { color: var(--text); }
+
+  @media print { body { background: #0F0F1A; } }
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══ -->
+<div class="cover">
+  <div class="cover-badge">VPS 설치 완전 가이드 v1.0</div>
+  <div class="cover-logo">OpenClaw</div>
+  <div class="cover-subtitle">AI Agent Platform</div>
+  <div class="cover-title">코딩 몰라도 됩니다.<br>24시간 AI 에이전트,<br>지금 바로 내 서버에.</div>
+  <div class="cover-desc">
+    서버 구매부터 텔레그램 연결까지<br>
+    비개발자도 따라할 수 있는 완전 가이드.<br>
+    설치는 터미널에 한 줄이면 끝납니다.
+  </div>
+  <div class="cover-tags">
+    <div class="tag">🖥 Contabo VPS</div>
+    <div class="tag">💬 텔레그램 연동</div>
+    <div class="tag">🤖 Claude AI</div>
+    <div class="tag">⚡ 원클릭 설치</div>
+    <div class="tag">🔒 보안 검증됨</div>
+    <div class="tag">🆓 완전 무료 공개</div>
+  </div>
+  <div class="cover-footer">
+    <span>github.com/kokoju007/openclaw-setup</span>
+    <div class="dot"></div>
+    <span>비개발자 완전 정복 시리즈</span>
+    <div class="dot"></div>
+    <span>2026</span>
+  </div>
+</div>
+
+
+<!-- ══ PAGE 2: 개념 + VPS 가입 ══ -->
+<div class="content">
+  <div class="page-header">
+    <div class="page-logo">OpenClaw</div>
+    <div class="page-num">02 / 05</div>
+  </div>
+
+  <div class="section-title"><div class="num">01</div>OpenClaw가 뭔가요?</div>
+  <p>일반 앱과 완전히 다른 방식으로 동작합니다. 이 개념만 잡으면 나머지는 쉬워요.</p>
+
+  <div class="card card-accent">
+    <div class="sub-title" style="margin-top:0">🖱 일반 프로그램</div>
+    <p style="margin:0;font-size:11.5px;">아이콘 더블클릭 → 직접 조작 → 창 닫으면 종료. <strong>내가 움직여야만</strong> 작동합니다.</p>
+  </div>
+  <div class="card card-success">
+    <div class="sub-title" style="margin-top:0;color:var(--success)">🤖 OpenClaw</div>
+    <p style="margin:0;font-size:11.5px;">아이콘 없음. 창 없음. 설치하면 <strong>보이지 않는 곳에서 24시간 대기</strong>합니다.<br>텔레그램으로 말 걸면 즉시 응답. 서버가 켜져 있는 한 항상 깨어 있어요.</p>
+  </div>
+
+  <div class="diagram">
+    <span class="hl">내 텔레그램</span>
+    <span class="arr"> ──────→ </span>
+    <span class="hl">VPS (OpenClaw 상주)</span>
+    <span class="arr"> ──────→ </span>
+    <span class="hl">Claude AI 처리</span><br>
+    <span style="font-size:10px;color:#374151;">"해줘" 한 마디</span>
+    <span style="font-size:10px;color:#374151;margin:0 48px;">명령 전달</span>
+    <span style="font-size:10px;color:#374151;">즉시 응답</span>
+  </div>
+
+  <div class="tip">
+    <div class="ti">💡</div>
+    <div><strong>VPS = 외부 사무실.</strong> 내 노트북을 꺼도 사무실 직원(OpenClaw)은 계속 일해요. 텔레그램은 그 직원에게 연락하는 메신저입니다.</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title"><div class="num">02</div>VPS 서버 구매 (Contabo)</div>
+  <p>OpenClaw가 24시간 돌아갈 서버가 필요합니다. 가성비 최고인 <strong>Contabo</strong> 기준으로 설명합니다.</p>
+
+  <div class="step-box">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="step-title">contabo.com 접속</div>
+      <div class="step-desc">https://contabo.com 접속 → 상단 메뉴 <strong>Cloud VPS</strong> 클릭</div>
+    </div>
+  </div>
+  <div class="step-box">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="step-title">플랜 선택</div>
+      <div class="step-desc"><strong>CLOUD VPS 1</strong> (월 $6.99) 선택 — OpenClaw 혼자 쓰기에 충분합니다</div>
+    </div>
+  </div>
+  <div class="step-box">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="step-title">OS 선택</div>
+      <div class="step-desc">Storage Type → SSD | Operating System → <strong>Ubuntu 22.04</strong> 선택</div>
+    </div>
+  </div>
+  <div class="step-box">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <div class="step-title">리전 선택</div>
+      <div class="step-desc">한국과 가까운 <strong>Singapore</strong> 또는 <strong>Japan</strong> 선택 (응답속도 빠름)</div>
+    </div>
+  </div>
+  <div class="step-box">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <div class="step-title">결제 & 가입</div>
+      <div class="step-desc">이메일 입력 → PayPal 또는 신용카드로 결제 → 가입 완료<br>
+      <span style="color:var(--warning);font-size:10.5px;">⚠️ Contabo는 주문 먼저 → 결제 후 가입 메일 발송 방식입니다</span></div>
+    </div>
+  </div>
+  <div class="step-box">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <div class="step-title">서버 정보 이메일 수신</div>
+      <div class="step-desc">결제 후 수분~수시간 내 <strong>IP 주소 + root 비밀번호</strong>가 이메일로 옵니다<br>
+      예시: IP <span class="badge">203.0.113.42</span> / PW <span class="badge">xK9#mP2qR</span></div>
+    </div>
+  </div>
+
+  <div class="card card-info" style="margin-top:6px;">
+    <p style="margin:0;font-size:11.5px;">💰 <strong>월 $6.99 (약 10,000원)</strong> — 이 서버에 OpenClaw를 올려두면 24시간 AI 에이전트가 작동합니다.</p>
+  </div>
+</div>
+
+
+<!-- ══ PAGE 3: 준비물 + 텔레그램 봇 + SSH 접속 ══ -->
+<div class="content">
+  <div class="page-header">
+    <div class="page-logo">OpenClaw</div>
+    <div class="page-num">03 / 05</div>
+  </div>
+
+  <div class="section-title"><div class="num">03</div>추가 준비물</div>
+  <div class="prep-grid">
+    <div class="prep-item">
+      <div class="prep-icon">🔑</div>
+      <div class="prep-name">Claude API 키</div>
+      <div class="prep-where">console.anthropic.com</div>
+      <div class="prep-cost">사용량 과금 · 월 $1~5 예상</div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon">🤖</div>
+      <div class="prep-name">텔레그램 봇 토큰</div>
+      <div class="prep-where">텔레그램 @BotFather</div>
+      <div class="prep-cost">무료 · 5분이면 발급</div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon">🪪</div>
+      <div class="prep-name">텔레그램 사용자 ID</div>
+      <div class="prep-where">텔레그램 @userinfobot</div>
+      <div class="prep-cost">무료 · 바로 확인 가능</div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon">🖥</div>
+      <div class="prep-name">VPS 서버 IP + 비밀번호</div>
+      <div class="prep-where">Contabo 가입 후 이메일</div>
+      <div class="prep-cost">이메일 받은 정보 그대로 사용</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title"><div class="num">04</div>텔레그램 봇 만들기</div>
+  <div class="flow">
+    <div class="flow-item">
+      <div class="flow-dot">1</div>
+      <div class="flow-content">
+        <div class="flow-label">@BotFather 검색</div>
+        <div class="flow-desc">텔레그램에서 @BotFather 검색 → 파란 체크 계정 선택 → 대화 시작</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">2</div>
+      <div class="flow-content">
+        <div class="flow-label">/newbot 입력 후 전송</div>
+        <div class="flow-desc">채팅창에 <span class="badge">/newbot</span> 입력</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">3</div>
+      <div class="flow-content">
+        <div class="flow-label">봇 이름 + username 입력</div>
+        <div class="flow-desc">이름 자유 (예: 내AI비서) · username은 영문+_bot으로 끝나야 함 (예: myai_bot)</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">4</div>
+      <div class="flow-content">
+        <div class="flow-label">토큰 복사 ✅</div>
+        <div class="flow-desc">예: <span class="badge">7123456789:AAFxxx_xxxxxxxxxxxxxxxxxxxxxxxxx</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <strong style="font-size:12px;">내 텔레그램 ID 확인</strong>
+    <p style="margin-top:5px;margin-bottom:0;font-size:11.5px;"><span class="badge">@userinfobot</span> 검색 → <span class="badge">/start</span> → <strong style="color:var(--accent)">Id: 123456789</strong> 숫자 확인 후 복사</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title"><div class="num">05</div>VPS에 접속하기 (SSH)</div>
+  <p>서버를 원격 조종하는 방법입니다. 딱 한 줄이에요.</p>
+
+  <div class="sub-title">🪟 Windows</div>
+  <p style="font-size:11.5px;">Windows 키 + R → <span class="badge">cmd</span> 입력 → 엔터 → 검은 창(터미널) 열림</p>
+  <div class="code-block">
+    <span class="code-cmd">ssh root@</span><span class="code-str">서버IP주소</span><br>
+    <span class="code-comment"># 예시: ssh root@203.0.113.42</span><br>
+    <span class="code-comment"># (Contabo 이메일에서 받은 IP 입력)</span>
+  </div>
+
+  <div class="sub-title">🍎 Mac</div>
+  <p style="font-size:11.5px;">⌘+Space → Terminal 검색 → 실행 → 위와 동일하게 입력</p>
+
+  <div class="card card-warning" style="margin-top:12px;">
+    <strong style="font-size:12px;">⚠️ 비밀번호 입력 시 화면에 아무것도 안 보여요</strong>
+    <p style="margin-top:5px;margin-bottom:0;font-size:11.5px;">정상입니다! 보안상 숨겨지는 거예요. Contabo 이메일의 비밀번호 그대로 치고 엔터 누르면 접속됩니다.</p>
+  </div>
+
+  <div class="tip" style="margin-top:10px;">
+    <div class="ti">💡</div>
+    <div>접속 성공하면 <strong style="color:var(--success)">root@vps:~#</strong> 형태의 프롬프트가 나타납니다. 이제 서버 안에 들어온 거예요.</div>
+  </div>
+</div>
+
+
+<!-- ══ PAGE 4: 원클릭 설치 + 확인 ══ -->
+<div class="content">
+  <div class="page-header">
+    <div class="page-logo">OpenClaw</div>
+    <div class="page-num">04 / 05</div>
+  </div>
+
+  <div class="section-title"><div class="num">06</div>원클릭 자동 설치</div>
+  <p>SSH 접속 후 아래 한 줄만 복사해서 붙여넣으면 끝입니다.</p>
+
+  <div class="code-block" style="font-size:12.5px;padding:16px 20px;">
+    <span class="code-cmd">curl</span> -fsSL https://raw.githubusercontent.com/kokoju007/openclaw-setup/main/install.sh | bash
+  </div>
+
+  <div class="tip">
+    <div class="ti">💡</div>
+    <div>터미널 붙여넣기 → <strong>마우스 우클릭</strong> 또는 <strong>Ctrl+Shift+V</strong> (Ctrl+V는 안 됩니다)</div>
+  </div>
+
+  <p style="margin-top:14px;">실행하면 자동으로 처리됩니다:</p>
+
+  <div class="flow">
+    <div class="flow-item">
+      <div class="flow-dot">1</div>
+      <div class="flow-content">
+        <div class="flow-label">서버 환경 확인</div>
+        <div class="flow-desc">Ubuntu 버전 자동 감지 — 20.04 / 22.04 / 24.04 지원</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">2</div>
+      <div class="flow-content">
+        <div class="flow-label">Node.js 자동 설치</div>
+        <div class="flow-desc">이미 있으면 스킵, 없으면 공식 저장소에서 자동 설치</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">3</div>
+      <div class="flow-content">
+        <div class="flow-label">OpenClaw 설치</div>
+        <div class="flow-desc">npm 공식 패키지 설치 (npmjs.com 등록 패키지)</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">4</div>
+      <div class="flow-content">
+        <div class="flow-label">텔레그램 봇 연결</div>
+        <div class="flow-desc">봇 토큰 + 사용자 ID 입력 → 설정 파일 자동 생성</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">5</div>
+      <div class="flow-content">
+        <div class="flow-label">보안 설정</div>
+        <div class="flow-desc">설정 파일 권한 잠금 (본인만 읽기 가능)</div>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">6</div>
+      <div class="flow-content">
+        <div class="flow-label">24시간 자동 실행 등록 ✅</div>
+        <div class="flow-desc">서버 재부팅해도 자동 시작 — 서버가 켜져 있는 한 항상 대기</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title"><div class="num">07</div>Claude API 키 연결</div>
+  <p>OpenClaw는 Claude AI를 두뇌로 사용합니다. API 키가 있어야 응답합니다.</p>
+
+  <div class="step-box">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="step-title">console.anthropic.com 접속 → 회원가입</div>
+      <div class="step-desc">구글 계정으로 간편 가입 가능</div>
+    </div>
+  </div>
+  <div class="step-box">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="step-title">API Keys → Create Key</div>
+      <div class="step-desc"><span class="badge">sk-ant-api03-...</span> 형태의 키 복사</div>
+    </div>
+  </div>
+  <div class="step-box">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="step-title">텔레그램 봇에게 API 키 전달</div>
+      <div class="step-desc">설치 완료 후 봇에게 "API 키 설정"이라고 보내면 입력 방법 안내해줌</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title"><div class="num">08</div>설치 완료 확인</div>
+  <div class="code-block">
+    <span class="code-cmd">sudo systemctl status openclaw</span><br><br>
+    <span class="code-out">● openclaw.service - OpenClaw AI Agent</span><br>
+    <span class="code-out">   Active: </span><span class="code-cmd">active (running)</span><span class="code-out">  ← 이게 보이면 정상! ✅</span>
+  </div>
+  <p style="margin-top:10px;">텔레그램에서 봇에게 <span class="badge">안녕</span> 이라고 보내보세요. 응답이 오면 완료입니다 🎉</p>
+</div>
+
+
+<!-- ══ PAGE 5: 보안 + 명령어 + FAQ ══ -->
+<div class="content">
+  <div class="page-header">
+    <div class="page-logo">OpenClaw</div>
+    <div class="page-num">05 / 05</div>
+  </div>
+
+  <div class="section-title"><div class="num">09</div>보안 인증</div>
+  <p>이 스크립트는 독립 보안 검증을 통과했습니다. 코드는 GitHub에서 누구나 확인 가능합니다.</p>
+  <div class="security-grid">
+    <div class="security-item"><div class="icon">🔒</div><div>외부 코드 자동 실행 없음<br><span style="color:var(--text-muted);font-size:10px;">eval/exec 미사용</span></div></div>
+    <div class="security-item"><div class="icon">🔒</div><div>개인정보 외부 전송 없음<br><span style="color:var(--text-muted);font-size:10px;">토큰은 서버 내부에만 저장</span></div></div>
+    <div class="security-item"><div class="icon">🔒</div><div>파일 삭제 명령어 없음<br><span style="color:var(--text-muted);font-size:10px;">rm -rf 미사용 확인됨</span></div></div>
+    <div class="security-item"><div class="icon">🔒</div><div>공식 패키지만 사용<br><span style="color:var(--text-muted);font-size:10px;">npm + apt 공식 저장소</span></div></div>
+    <div class="security-item"><div class="icon">🔒</div><div>설정 파일 권한 잠금<br><span style="color:var(--text-muted);font-size:10px;">chmod 600 자동 적용</span></div></div>
+    <div class="security-item"><div class="icon">🔒</div><div>오픈소스 공개 검증<br><span style="color:var(--text-muted);font-size:10px;">github.com/kokoju007</span></div></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title"><div class="num">10</div>유용한 명령어</div>
+  <table class="cmd-table">
+    <tr><th>명령어</th><th>설명</th></tr>
+    <tr><td class="mono">sudo systemctl status openclaw</td><td>현재 상태 확인</td></tr>
+    <tr><td class="mono">sudo systemctl restart openclaw</td><td>재시작</td></tr>
+    <tr><td class="mono">sudo systemctl stop openclaw</td><td>중지</td></tr>
+    <tr><td class="mono">sudo journalctl -u openclaw -f</td><td>실시간 로그 보기</td></tr>
+    <tr><td class="mono">sudo journalctl -u openclaw -n 50</td><td>최근 50줄 로그</td></tr>
+  </table>
+
+  <hr class="divider">
+
+  <div class="section-title"><div class="num">11</div>자주 묻는 질문</div>
+
+  <div class="card" style="margin-bottom:9px;">
+    <strong style="font-size:12px;">Q. 봇이 응답을 안 해요</strong>
+    <p style="margin-top:5px;margin-bottom:0;font-size:11.5px;">① 봇 토큰이 맞는지 확인 → ② 내 텔레그램 ID가 맞는지 확인 → ③ <span class="badge">sudo systemctl restart openclaw</span></p>
+  </div>
+  <div class="card" style="margin-bottom:9px;">
+    <strong style="font-size:12px;">Q. 서버 재부팅 후 작동 안 해요</strong>
+    <p style="margin-top:5px;margin-bottom:0;font-size:11.5px;"><span class="badge">sudo systemctl enable openclaw</span> 실행 후 재시도</p>
+  </div>
+  <div class="card" style="margin-bottom:9px;">
+    <strong style="font-size:12px;">Q. SSH 접속이 안 돼요</strong>
+    <p style="margin-top:5px;margin-bottom:0;font-size:11.5px;">Contabo 이메일의 IP/비밀번호 다시 확인. 비밀번호 입력 시 화면에 안 보이는 건 정상입니다.</p>
+  </div>
+  <div class="card" style="margin-bottom:18px;">
+    <strong style="font-size:12px;">Q. API 키 비용이 얼마나 나와요?</strong>
+    <p style="margin-top:5px;margin-bottom:0;font-size:11.5px;">일반적인 개인 사용 기준 월 $1~5 수준. Anthropic 콘솔에서 한도 설정 가능합니다.</p>
+  </div>
+
+  <div class="card card-accent" style="text-align:center;padding:20px;">
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">📦 GitHub 저장소</div>
+    <p style="margin:0;font-size:12px;color:var(--accent);">github.com/kokoju007/openclaw-setup</p>
+    <p style="margin-top:6px;margin-bottom:0;font-size:11px;">스크립트 전체 공개 · Star 눌러주시면 계속 업데이트합니다 ⭐</p>
+  </div>
+
+  <p style="text-align:center;margin-top:18px;font-size:10px;color:#374151;">OpenClaw VPS 설치 가이드 v1.0 · 2026 · 무단 배포 금지</p>
+</div>
+
+</body>
+</html>
