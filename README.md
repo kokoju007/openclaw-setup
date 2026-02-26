@@ -8,11 +8,10 @@
 
 ## ⚡ 원클릭 설치
 
-VPS에 SSH 접속 후 아래 두 줄을 붙여넣으세요:
+VPS에 SSH 접속 후 아래 한 줄만 붙여넣으세요:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kokaju007/openclaw-setup/main/install.sh -o install.sh
-bash install.sh
+curl -fsSL https://raw.githubusercontent.com/kokoju007/openclaw-setup/main/install.sh | bash
 ```
 
 자동으로 처리되는 것들:
@@ -35,11 +34,9 @@ bash install.sh
 
 ---
 
-## 📖 상세 가이드 (PDF)
+## 📖 상세 가이드
 
 **Releases** 탭에서 PDF 가이드를 다운로드하세요.
-
-👉 [PDF 다운로드](https://github.com/kokaju007/openclaw-setup/releases/download/v1.1.0/openclaw-vps-guide.pdf)
 
 Contabo 가입 → SSH 접속 → 설치 → 텔레그램 연결 → API 키 설정까지  
 스크린샷 없이도 따라할 수 있게 단계별로 설명합니다.
@@ -48,10 +45,12 @@ Contabo 가입 → SSH 접속 → 설치 → 텔레그램 연결 → API 키 설
 
 ## 🔒 보안
 
+이 스크립트는 다음을 보장합니다:
+
 - 외부 코드 자동 실행 없음 (eval/exec 미사용)
 - 개인정보 외부 전송 없음 (토큰은 서버 내부에만 저장)
 - 공식 패키지만 사용 (npm + apt 공식 저장소)
-- **Ubuntu 20.04 / 22.04 / 24.04 실서버 3회 직접 테스트 완료**
+- 설정 파일 권한 잠금 (chmod 600 자동 적용)
 - 파일 삭제 명령어 없음 (rm -rf 미사용)
 
 코드는 전체 공개되어 있으니 직접 확인하세요.
@@ -92,4 +91,4 @@ sudo journalctl -u openclaw -f
 
 ---
 
-*Made by [@kokaju007](https://github.com/kokaju007)*
+*Made by [@kokoju007](https://github.com/kokoju007)*
